@@ -3,12 +3,11 @@ import { Form, ActionPanel, Action, Toast, popToRoot, Icon } from "@raycast/api"
 import ampStart from "./amp-start";
 
 enum Intervals {
-  "minutes" = "30",
   "hours" = "1",
 }
 
 export default function SessionWithDuration() {
-  const [interval, setInterval] = useState<keyof typeof Intervals>("minutes");
+  const [interval, setInterval] = useState<keyof typeof Intervals>("hours");
   const [duration, setDuration] = useState<string>(Intervals[interval]);
 
   const toast = new Toast({
@@ -29,7 +28,7 @@ export default function SessionWithDuration() {
       if (!duration) {
         started = await ampStart();
       } else {
-        started = await ampStart({ duration: convertedDuration, interval });
+        started = await ampStart({ duration: convertedDuration });
       }
       if (started) popToRoot();
     }
@@ -58,12 +57,6 @@ export default function SessionWithDuration() {
             shortcut={{ key: "h", modifiers: ["cmd"] }}
             icon={Icon.Clock}
           />
-          <Action
-            title="Select Minutes"
-            onAction={() => handleChangeDuration("minutes")}
-            shortcut={{ key: "m", modifiers: ["cmd"] }}
-            icon={Icon.Clock}
-          />
         </ActionPanel>
       }
       navigationTitle="Configure Session"
@@ -77,16 +70,6 @@ export default function SessionWithDuration() {
         value={duration}
         onChange={(value) => setDuration(value)}
       />
-      <Form.Dropdown
-        id="interval"
-        title="Unit"
-        value={interval}
-        info={`Select whether the duration should be in minutes or in hours.\n\n- Changing the duration to hours will set a default value of 1 hour.\n- Changing the duration to minutes will set a default value of 30 minutes`}
-        onChange={(value) => handleChangeDuration(value as keyof typeof Intervals)}
-      >
-        <Form.Dropdown.Item value="minutes" title="minutes" />
-        <Form.Dropdown.Item value="hours" title="hours" />
-      </Form.Dropdown>
     </Form>
   );
 }

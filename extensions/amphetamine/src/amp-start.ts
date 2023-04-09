@@ -5,12 +5,11 @@ import { AMPHETAMINE_DOWNLOAD_URL, checkIfAmphetamineInstalled } from "./utils";
 
 interface CommandArgs {
   duration: number;
-  interval: "minutes" | "hours";
 }
 
 export default async function Command(args?: CommandArgs) {
   const duration = args?.duration;
-  const interval = args?.interval;
+  const interval = "hours";
   const parsedInterval = duration === 1 ? interval?.substring(0, interval.length - 1) : interval;
 
   const toast = new Toast({
